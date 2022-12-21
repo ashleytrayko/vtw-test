@@ -32,4 +32,19 @@ public class VtwBoardService {
             return new IllegalArgumentException("상세보기 실패");
         });
     }
+
+    @Transactional
+    public void updateBoard(long boardNo, VtwBoard vtwBoard) {
+        VtwBoard targetBoard = vtwBoardRepository.findById(boardNo)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("글 찾기 실패");
+                });
+        targetBoard.setSubject(vtwBoard.getSubject());
+        targetBoard.setContents(vtwBoard.getContents());
+    }
+
+    @Transactional
+    public void deleteBoard(long boardNo) {
+        vtwBoardRepository.deleteById(boardNo);
+    }
 }

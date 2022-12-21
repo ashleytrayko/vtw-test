@@ -41,4 +41,14 @@ public class VtwRestController {
         vtwBoardService.writeBoard(vtwBoard, principal);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void deleteBoard(@PathVariable long boardNo){
+        vtwBoardService.deleteBoard(boardNo);
+    }
+
+    @PutMapping("/update/{id}")
+    public void updateBoard(@PathVariable long boardNo, @ModelAttribute VtwBoard vtwBoard){
+        vtwBoardService.updateBoard(boardNo, vtwBoard);
+    }
+
 }
