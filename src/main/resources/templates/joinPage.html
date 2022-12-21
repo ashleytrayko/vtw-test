@@ -10,9 +10,9 @@
   <form method="post" action="/join">
 <!--      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
     <label for="username">username:</label>
-    <input type="text" id="username" name="username" placeholder="아이디 입력">
+    <input type="text" id="username" name="username" placeholder="아이디 입력" maxlength="30">
     <label for="password">password:</label>
-    <input type="password" id="password" name="password" placeholder="패스워드 입력">
+    <input type="password" id="password" name="password" placeholder="패스워드 입력" maxlength="60">
       <input type="submit" value="가입">
   </form>
 </body>

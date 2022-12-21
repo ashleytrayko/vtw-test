@@ -1,7 +1,6 @@
 package com.example.test.configuration;
 
-import com.example.test.domain.TestUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.test.domain.VtwUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,9 +9,11 @@ import java.util.Collection;
 
 public class PrincipalDetail implements UserDetails {
 
-    private TestUser user;
+    private VtwUser user;
 
-    public PrincipalDetail(TestUser user){
+    public PrincipalDetail(VtwUser user){
+
+        // Composition
         this.user = user;
     }
 
@@ -34,6 +35,8 @@ public class PrincipalDetail implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    public VtwUser getUser() {return user;}
 
     @Override
     public boolean isAccountNonExpired() {
