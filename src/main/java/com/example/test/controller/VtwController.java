@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 // 단순 View만 처리하는 Controller로 수정
 @Controller
@@ -50,6 +51,11 @@ public class VtwController {
         return "/board/writeForm";
     }
 
+    @GetMapping("/board/updateForm")
+    public String updateForm(@RequestParam long boardNo, Model model) {
+        model.addAttribute("board", vtwBoardService.selectOne(boardNo));
+        return "/board/updateForm";
+    }
     @GetMapping("/detail/{boardNo}")
     public String boardDetail(@PathVariable long boardNo, Model model){
         model.addAttribute("board",vtwBoardService.selectOne(boardNo));

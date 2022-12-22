@@ -3,6 +3,7 @@ package com.example.test.service;
 import com.example.test.configuration.PrincipalDetail;
 import com.example.test.domain.VtwBoard;
 import com.example.test.domain.VtwUser;
+import com.example.test.dto.VtwUserDTO;
 import com.example.test.repository.VtwBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

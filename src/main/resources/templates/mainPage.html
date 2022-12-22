@@ -13,7 +13,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Navbar</a>
+            <a class="navbar-brand" href="/">vtw</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -41,9 +41,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="board: ${boards}" th:href="@{/detail/{boardNo}}">
+                <tr th:each="board: ${boards}">
                     <td th:text="${board.boardNo}"></td>
-                    <td th:text="${board.subject}"></td>
+                    <td>
+                        <a th:text="${board.subject}" th:href="@{/detail/__${board.boardNo}__}">ㅎㅎ</a>
+                    </td>
                     <td th:text="${board.vtwUser.getUsername()}"></td>
                     <td th:text="${board.writeTime}"></td>
                 </tr>

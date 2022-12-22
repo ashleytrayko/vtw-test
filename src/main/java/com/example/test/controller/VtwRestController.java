@@ -3,12 +3,14 @@ package com.example.test.controller;
 import com.example.test.configuration.PrincipalDetail;
 import com.example.test.domain.VtwBoard;
 import com.example.test.domain.VtwUser;
+import com.example.test.dto.VtwUserDTO;
 import com.example.test.service.VtwBoardService;
 import com.example.test.service.VtwUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
@@ -21,8 +23,8 @@ public class VtwRestController {
     private final VtwBoardService vtwBoardService;
     
     @PostMapping("/join")
-    public String join(@ModelAttribute VtwUser user){
-        String result = vtwUserService.join(user);
+    public String join(@ModelAttribute VtwUserDTO vtwUserDTO){
+        String result = vtwUserService.join(vtwUserDTO);
         if(result.equals("ok")){
             return "mainPage";
         }else return "errorPage";
@@ -37,18 +39,30 @@ public class VtwRestController {
     }
 
     @PostMapping("/write")
-    public void writeBoard(@ModelAttribute VtwBoard vtwBoard, @AuthenticationPrincipal PrincipalDetail principal){
+    public ModelAndView writeBoard(@ModelAttribute VtwBoard vtwBoard
+            , @AuthenticationPrincipal PrincipalDetail principal
+            , ModelAndView mv){
         vtwBoardService.writeBoard(vtwBoard, principal);
+        mv.setViewName("redirect:/");
+        return mv;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteBoard(@PathVariable long boardNo){
+    @GetMapping("/delete/{boardNo}")
+    public ModelAndView deleteBoard(@PathVariable long boardNo
+                                , ModelAndView mv){
+
         vtwBoardService.deleteBoard(boardNo);
+        mv.setViewName("redirect:/");
+        return mv;
     }
 
-    @PutMapping("/update/{id}")
-    public void updateBoard(@PathVariable long boardNo, @ModelAttribute VtwBoard vtwBoard){
+    @PostMapping ("/update/{boardNo}")
+    public ModelAndView updateBoard(@PathVariable long boardNo
+                        , @ModelAttribute VtwBoard vtwBoard
+                        , ModelAndView mv){
         vtwBoardService.updateBoard(boardNo, vtwBoard);
+        mv.setViewName("redirect:/");
+        return mv;
     }
 
 }

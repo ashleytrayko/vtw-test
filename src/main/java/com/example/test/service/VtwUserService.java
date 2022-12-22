@@ -2,6 +2,7 @@ package com.example.test.service;
 
 import com.example.test.domain.RoleType;
 import com.example.test.domain.VtwUser;
+import com.example.test.dto.VtwUserDTO;
 import com.example.test.repository.VtwUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,13 +33,16 @@ public class VtwUserService {
     }
 
     @Transactional
-    public String join(VtwUser user){
+    public String join(VtwUserDTO vtwUserDTO){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = user.getPassword();
+        String password = vtwUserDTO.getPassword();
         String encodedPassword = encoder.encode(password);
-        user.setPassword(encodedPassword);
-        user.setRole(RoleType.USER);
-        vtwUserRepository.save(user);
+        VtwUser vtwUser = VtwUser.builder()
+                .username(vtwUserDTO.getUsername())
+                .password(encodedPassword)
+                .role(RoleType.USER)
+                .build();
+        vtwUserRepository.save(vtwUser);
         return "ok";
     }
 
