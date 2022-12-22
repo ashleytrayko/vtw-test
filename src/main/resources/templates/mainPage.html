@@ -52,7 +52,21 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-primary"><a href="/write">글 작성</a></button>
+        <ul class="pagination">
+            <li th:if="${boards.first}" class="page-item disabled">
+                <a class="page-link" th:href="@{/(page=${boards.number - 1})}" th:text="Previous"></a>
+            </li>
+            <li th:unless="${boards.first}" class="page-item">
+                <a class="page-link" th:href="@{/(page=${boards.number - 1})}" th:text="Previous"></a>
+            </li>
+            <li th:if="${boards.last}" class="page-item disabled">
+                <a class="page-link" th:href="@{/(page=${boards.number + 1})}" th:text="Next"></a>
+            </li>
+            <li th:unless="${boards.last}" class="page-item">
+                <a class="page-link" th:href="@{/(page=${boards.number + 1})}" th:text="Next"></a>
+            </li>
+        </ul>
+        <a class="btn btn-primary" th:href="@{/write}">글 작성</a>
     </div>
 </section>
 <footer></footer>

@@ -26,8 +26,8 @@
                 </tr>
             </tbody>
         </table>
-        <a id="updateBtn" th:href="@{/board/updateForm(boardNo=${board.getBoardNo()})}">글 수정</a>
-        <a id="deleteBtn" th:href="@{/delete/__${boardNo}__}">글 삭제</a>
+        <a class="btn btn-warning" id="updateBtn" th:href="@{/board/updateForm(boardNo=${board.getBoardNo()})}">글 수정</a>
+        <a class="btn btn-danger" id="deleteBtn" th:href="@{/delete/__${boardNo}__}">글 삭제</a>
 
     </div>
 <!--<script type="text/javascript" th:inline="javascript">-->
