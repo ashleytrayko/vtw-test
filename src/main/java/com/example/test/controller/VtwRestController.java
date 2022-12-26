@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 
 // 데이터를 처리하는 RestController 여기서는 @RequiredArgContructor 어노테이션 사용해봄
@@ -23,62 +25,72 @@ public class VtwRestController {
     private final VtwBoardService vtwBoardService;
     
     @PostMapping("/join")
-    public ModelAndView join(@ModelAttribute VtwUserDTO vtwUserDTO
-                            ,ModelAndView mv){
-        vtwUserService.join(vtwUserDTO);
-        mv.setViewName("redirect:/");
-        return mv;
-    }
-
-    @GetMapping("/mypage")
-    public ModelAndView userPage(PrincipalDetail principal, ModelAndView mv){
-        if(principal != null){
-            mv.addObject("userInfo", principal.getUser());
-            mv.setViewName("member/myPage");
+    public void join(@ModelAttribute VtwUserDTO vtwUserDTO
+                    ,HttpServletResponse response){
+        try {
+            vtwUserService.join(vtwUserDTO);
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return mv;
     }
 
     @PostMapping("/write")
-    public ModelAndView writeBoard(@ModelAttribute VtwBoard vtwBoard
+    public void writeBoard(@ModelAttribute VtwBoard vtwBoard
             , @AuthenticationPrincipal PrincipalDetail principal
-            , ModelAndView mv){
+            ,HttpServletResponse response){
         vtwBoardService.writeBoard(vtwBoard, principal);
-        mv.setViewName("redirect:/");
-        return mv;
+        try {
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/delete/{boardNo}")
-    public ModelAndView deleteBoard(@PathVariable long boardNo
-                                , ModelAndView mv){
+    public void deleteBoard(@PathVariable long boardNo
+                            ,HttpServletResponse response){
 
         vtwBoardService.deleteBoard(boardNo);
-        mv.setViewName("redirect:/");
-        return mv;
+        try {
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping ("/update/{boardNo}")
-    public ModelAndView updateBoard(@PathVariable long boardNo
+    public void updateBoard(@PathVariable long boardNo
                         , @ModelAttribute VtwBoard vtwBoard
-                        , ModelAndView mv){
+                        , HttpServletResponse response){
         vtwBoardService.updateBoard(boardNo, vtwBoard);
-        mv.setViewName("redirect:/");
-        return mv;
+        try {
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/resign")
-    public ModelAndView resign(ModelAndView mv, @AuthenticationPrincipal PrincipalDetail principal){
+    public void resign(@AuthenticationPrincipal PrincipalDetail principal
+                        , HttpServletResponse response){
         vtwUserService.resign(principal);
-        mv.setViewName("redirect:/logout");
-        return mv;
+        try {
+            response.sendRedirect("/logout");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/updateUser")
-    public ModelAndView updateUser(ModelAndView mv
-                                    ,@ModelAttribute VtwUserDTO vtwUserDTO){
+    public void updateUser(@ModelAttribute VtwUserDTO vtwUserDTO
+                            , HttpServletResponse response){
         vtwUserService.updateUser(vtwUserDTO);
-        mv.setViewName("redirect:/");
-        return mv;
+        try {
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

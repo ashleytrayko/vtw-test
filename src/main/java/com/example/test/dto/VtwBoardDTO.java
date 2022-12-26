@@ -17,6 +17,6 @@ public class VtwBoardDTO {
     private String subject;
     private String contents;
     private VtwUser vtwUser;
-    private Timestamp writeTime;
-    private Timestamp updateTime;
+    private Timestamp creationDate;
+    private Timestamp updateDate;
 }

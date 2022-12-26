@@ -31,7 +31,7 @@
                         <a th:text="${board.subject}" th:href="@{/detail/__${board.boardNo}__}"></a>
                     </td>
                     <td th:text="${board.vtwUser.getUsername()}"></td>
-                    <td th:text="${board.writeTime}"></td>
+                    <td th:text="${board.creationDate}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -30,8 +30,8 @@ public class VtwBoard {
     private VtwUser vtwUser;
 
     @CreationTimestamp
-    private Timestamp writeTime;
+    private Timestamp creationDate;
 
     @UpdateTimestamp
-    private Timestamp updateTime;
+    private Timestamp updateDate;
 }

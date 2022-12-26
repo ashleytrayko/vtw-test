@@ -1,5 +1,6 @@
 package com.example.test.controller;
 
+import com.example.test.configuration.PrincipalDetail;
 import com.example.test.service.VtwBoardService;
 import com.example.test.service.VtwUserService;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,11 @@ public class VtwController {
         return "mainPage";
     }
 
+    @GetMapping("/error")
+    public String errorPage(){
+        return "errorPage";
+    }
+
     @GetMapping("/login")
     public String loginPage(){
         return "loginPage";
@@ -60,6 +66,15 @@ public class VtwController {
     public String boardDetail(@PathVariable long boardNo, Model model){
         model.addAttribute("board",vtwBoardService.selectOne(boardNo));
         return "board/boardDetail";
+    }
+
+    @GetMapping("/mypage")
+    public String userPage(PrincipalDetail principal
+            , Model model){
+//        if(principal != null){
+//            model.addAttribute("userInfo", principal.getUser());
+//        }
+        return "member/myPage";
     }
 
 }
