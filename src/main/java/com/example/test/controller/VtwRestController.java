@@ -23,19 +23,20 @@ public class VtwRestController {
     private final VtwBoardService vtwBoardService;
     
     @PostMapping("/join")
-    public String join(@ModelAttribute VtwUserDTO vtwUserDTO){
-        String result = vtwUserService.join(vtwUserDTO);
-        if(result.equals("ok")){
-            return "mainPage";
-        }else return "errorPage";
+    public ModelAndView join(@ModelAttribute VtwUserDTO vtwUserDTO
+                            ,ModelAndView mv){
+        vtwUserService.join(vtwUserDTO);
+        mv.setViewName("redirect:/");
+        return mv;
     }
 
-    @GetMapping("/user")
-    public String userPage(Principal principal, Model model){
+    @GetMapping("/mypage")
+    public ModelAndView userPage(PrincipalDetail principal, ModelAndView mv){
         if(principal != null){
-            model.addAttribute("userInfo", principal);
+            mv.addObject("userInfo", principal.getUser());
+            mv.setViewName("member/myPage");
         }
-        return "/member/userInfo";
+        return mv;
     }
 
     @PostMapping("/write")
@@ -61,6 +62,21 @@ public class VtwRestController {
                         , @ModelAttribute VtwBoard vtwBoard
                         , ModelAndView mv){
         vtwBoardService.updateBoard(boardNo, vtwBoard);
+        mv.setViewName("redirect:/");
+        return mv;
+    }
+
+    @GetMapping("/resign")
+    public ModelAndView resign(ModelAndView mv, @AuthenticationPrincipal PrincipalDetail principal){
+        vtwUserService.resign(principal);
+        mv.setViewName("redirect:/logout");
+        return mv;
+    }
+
+    @PostMapping("/updateUser")
+    public ModelAndView updateUser(ModelAndView mv
+                                    ,@ModelAttribute VtwUserDTO vtwUserDTO){
+        vtwUserService.updateUser(vtwUserDTO);
         mv.setViewName("redirect:/");
         return mv;
     }

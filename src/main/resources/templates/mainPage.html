@@ -10,23 +10,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">vtw</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/user">User Infomation</a>
-                    <a class="nav-link" href="/join">Join</a>
-                    <a class="nav-link" href="/logout">Logout</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<header th:insert="~{common/header :: navbar}">
 </header>
 <section>
     <div class="container">
@@ -44,7 +28,7 @@
                 <tr th:each="board: ${boards}">
                     <td th:text="${board.boardNo}"></td>
                     <td>
-                        <a th:text="${board.subject}" th:href="@{/detail/__${board.boardNo}__}">ㅎㅎ</a>
+                        <a th:text="${board.subject}" th:href="@{/detail/__${board.boardNo}__}"></a>
                     </td>
                     <td th:text="${board.vtwUser.getUsername()}"></td>
                     <td th:text="${board.writeTime}"></td>
