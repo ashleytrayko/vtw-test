@@ -25,9 +25,9 @@ public class VtwRestController {
     private final VtwBoardService vtwBoardService;
     
     @PostMapping("/join")
-    public void join(@RequestParam String joinInfo){
-        System.out.println(joinInfo);
-//        vtwUserService.join(vtwUserDTO);
+    public String join(@RequestBody VtwUserDTO vtwUserDTO){
+        String returnValue = vtwUserService.join(vtwUserDTO);
+        return returnValue;
     }
 
     @PostMapping("/write")

@@ -32,7 +32,7 @@ public class VtwUserService {
     }
 
     @Transactional
-    public void join(VtwUserDTO vtwUserDTO){
+    public String join(VtwUserDTO vtwUserDTO){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String password = vtwUserDTO.getPassword();
         String encodedPassword = encoder.encode(password);
@@ -41,7 +41,12 @@ public class VtwUserService {
                                 .password(encodedPassword)
                                 .role(RoleType.USER)
                                 .build();
-        vtwUserRepository.save(vtwUser);
+        VtwUser returnValue = vtwUserRepository.saveAndFlush(vtwUser);
+        if(returnValue != null){
+            return "success";
+        }else{
+            return "fail";
+        }
     }
     @Transactional
     public void resign(PrincipalDetail principal) {
