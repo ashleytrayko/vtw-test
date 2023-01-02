@@ -27,9 +27,7 @@ public class VtwUserService {
 
     @Transactional(readOnly = true)
     public VtwUser findUser(String username){
-        VtwUser user = vtwUserRepository.findByUsername(username).orElseGet(()->{
-            return new VtwUser();
-        });
+        VtwUser user = vtwUserRepository.findByUsername(username).orElseGet(()-> new VtwUser());
         return user;
     }
 
@@ -51,6 +49,7 @@ public class VtwUserService {
         vtwUserRepository.deleteById(principal.getUser().getUserId());
     }
 
+    @Transactional
     public void updateUser(VtwUserDTO vtwUserDTO) {
         VtwUser vtwUser = vtwUserRepository.findById(vtwUserDTO.getUserId())
                 .orElseThrow(()->{

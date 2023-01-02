@@ -25,72 +25,36 @@ public class VtwRestController {
     private final VtwBoardService vtwBoardService;
     
     @PostMapping("/join")
-    public void join(@ModelAttribute VtwUserDTO vtwUserDTO
-                    ,HttpServletResponse response){
-        try {
-            vtwUserService.join(vtwUserDTO);
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void join(@RequestParam String joinInfo){
+        System.out.println(joinInfo);
+//        vtwUserService.join(vtwUserDTO);
     }
 
     @PostMapping("/write")
     public void writeBoard(@ModelAttribute VtwBoard vtwBoard
-            , @AuthenticationPrincipal PrincipalDetail principal
-            ,HttpServletResponse response){
+            , @AuthenticationPrincipal PrincipalDetail principal){
         vtwBoardService.writeBoard(vtwBoard, principal);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @GetMapping("/delete/{boardNo}")
-    public void deleteBoard(@PathVariable long boardNo
-                            ,HttpServletResponse response){
-
+    public void deleteBoard(@PathVariable long boardNo){
         vtwBoardService.deleteBoard(boardNo);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PostMapping ("/update/{boardNo}")
     public void updateBoard(@PathVariable long boardNo
-                        , @ModelAttribute VtwBoard vtwBoard
-                        , HttpServletResponse response){
+                        , @ModelAttribute VtwBoard vtwBoard){
         vtwBoardService.updateBoard(boardNo, vtwBoard);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @GetMapping("/resign")
-    public void resign(@AuthenticationPrincipal PrincipalDetail principal
-                        , HttpServletResponse response){
+    public void resign(@AuthenticationPrincipal PrincipalDetail principal){
         vtwUserService.resign(principal);
-        try {
-            response.sendRedirect("/logout");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PostMapping("/updateUser")
-    public void updateUser(@ModelAttribute VtwUserDTO vtwUserDTO
-                            , HttpServletResponse response){
+    public void updateUser(@ModelAttribute VtwUserDTO vtwUserDTO){
         vtwUserService.updateUser(vtwUserDTO);
-        try {
-            response.sendRedirect("/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
