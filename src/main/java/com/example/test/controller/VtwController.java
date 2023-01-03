@@ -71,9 +71,6 @@ public class VtwController {
     @GetMapping("/mypage")
     public String userPage(PrincipalDetail principal
             , Model model){
-//        if(principal != null){
-//            model.addAttribute("userInfo", principal.getUser());
-//        }
         return "member/myPage";
     }
 

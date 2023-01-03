@@ -1,6 +1,7 @@
 package com.example.test.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class VtwBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

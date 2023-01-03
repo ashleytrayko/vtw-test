@@ -3,6 +3,7 @@ package com.example.test.controller;
 import com.example.test.configuration.PrincipalDetail;
 import com.example.test.domain.VtwBoard;
 import com.example.test.domain.VtwUser;
+import com.example.test.dto.VtwBoardDTO;
 import com.example.test.dto.VtwUserDTO;
 import com.example.test.service.VtwBoardService;
 import com.example.test.service.VtwUserService;
@@ -26,35 +27,34 @@ public class VtwRestController {
     
     @PostMapping("/join")
     public String join(@RequestBody VtwUserDTO vtwUserDTO){
-        String returnValue = vtwUserService.join(vtwUserDTO);
-        return returnValue;
+        return vtwUserService.join(vtwUserDTO);
     }
 
     @PostMapping("/write")
-    public void writeBoard(@ModelAttribute VtwBoard vtwBoard
+    public String writeBoard(@RequestBody VtwBoardDTO vtwBoardDTO
             , @AuthenticationPrincipal PrincipalDetail principal){
-        vtwBoardService.writeBoard(vtwBoard, principal);
+        return vtwBoardService.writeBoard(vtwBoardDTO, principal);
     }
 
     @GetMapping("/delete/{boardNo}")
-    public void deleteBoard(@PathVariable long boardNo){
-        vtwBoardService.deleteBoard(boardNo);
+    public String deleteBoard(@PathVariable long boardNo){
+        return vtwBoardService.deleteBoard(boardNo);
     }
 
     @PostMapping ("/update/{boardNo}")
-    public void updateBoard(@PathVariable long boardNo
-                        , @ModelAttribute VtwBoard vtwBoard){
-        vtwBoardService.updateBoard(boardNo, vtwBoard);
+    public String updateBoard(@PathVariable long boardNo
+                        ,@RequestBody VtwBoardDTO vtwBoardDTO){
+        return vtwBoardService.updateBoard(boardNo, vtwBoardDTO);
     }
 
     @GetMapping("/resign")
-    public void resign(@AuthenticationPrincipal PrincipalDetail principal){
-        vtwUserService.resign(principal);
+    public String resign(@AuthenticationPrincipal PrincipalDetail principal){
+        return vtwUserService.resign(principal);
     }
 
     @PostMapping("/updateUser")
-    public void updateUser(@ModelAttribute VtwUserDTO vtwUserDTO){
-        vtwUserService.updateUser(vtwUserDTO);
+    public String updateUser(@RequestBody VtwUserDTO vtwUserDTO){
+        return vtwUserService.updateUser(vtwUserDTO);
     }
 
 }

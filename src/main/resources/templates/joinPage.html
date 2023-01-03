@@ -28,35 +28,10 @@
       </div>
     </form>
       <div class="mb-3">
-          <button class="btn btn-primary col-lg-12" type="button" onclick="submit()">가입</button>
+          <button class="btn btn-primary col-lg-12" type="button" onclick="join()">가입</button>
           <a class="btn btn-secondary col-lg-12" type="submit" th:text="돌아가기" th:href="@{/}"></a>
     </div>
   </div>
-<script type="text/javascript">
-    function submit() {
-        const answer = confirm("회원가입 하시겠습니까?");
-        if (answer === true) {
-            let data = {
-                username: $("#username").val(),
-                password: $("#password").val()
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "join",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset-utf-8",
-            }).done(function (response){
-                if(response === "success"){
-                    location.href="/";
-                }else{
-                    alert("회원가입 실패!");
-                }
-            }).fail(function (error) {
-                alert(JSON.stringify(error))
-            })
-        }
-    }
-</script>
+<script src="/js/Function.js"></script>
 </body>
 </html>

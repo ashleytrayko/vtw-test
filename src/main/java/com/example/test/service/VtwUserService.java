@@ -49,13 +49,17 @@ public class VtwUserService {
         }
     }
     @Transactional
-    public void resign(PrincipalDetail principal) {
-        System.out.println(principal.getUser());
-        vtwUserRepository.deleteById(principal.getUser().getUserId());
+    public String resign(PrincipalDetail principal) {
+        int returnValue = vtwUserRepository.customDeleteById(principal.getUser().getUserId());
+        if(returnValue >= 1){
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 
     @Transactional
-    public void updateUser(VtwUserDTO vtwUserDTO) {
+    public String updateUser(VtwUserDTO vtwUserDTO) {
         VtwUser vtwUser = vtwUserRepository.findById(vtwUserDTO.getUserId())
                 .orElseThrow(()->{
                     return new IllegalArgumentException("불러올 유저가 없습니다.");
@@ -63,6 +67,11 @@ public class VtwUserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String newPassword = encoder.encode(vtwUserDTO.getPassword());
         vtwUser.setPassword(newPassword);
-        vtwUserRepository.save(vtwUser);
+        VtwUser returnValue = vtwUserRepository.saveAndFlush(vtwUser);
+        if(returnValue != null){
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 }
