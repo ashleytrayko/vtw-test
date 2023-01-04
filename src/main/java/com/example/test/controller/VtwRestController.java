@@ -1,21 +1,14 @@
 package com.example.test.controller;
 
 import com.example.test.configuration.PrincipalDetail;
-import com.example.test.domain.VtwBoard;
-import com.example.test.domain.VtwUser;
 import com.example.test.dto.VtwBoardDTO;
 import com.example.test.dto.VtwUserDTO;
 import com.example.test.service.VtwBoardService;
 import com.example.test.service.VtwUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Principal;
 
 // 데이터를 처리하는 RestController 여기서는 @RequiredArgContructor 어노테이션 사용해봄
 @RequiredArgsConstructor
