@@ -19,13 +19,16 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
+#    url: jdbc:mysql://172.30.1.103:3306/analysis?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
     username: root
     password: root
+#    username: analysis
+#    password: Analysis123#
 
   jpa:
     open-in-view: false
     generate-ddl: true
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: update
       naming:
@@ -39,3 +42,20 @@ spring:
 
   thymeleaf:
     cache: false
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      bootstrap-servers: localhost:9092
+
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      bootstrap-servers: localhost:9092
+      group-id: stream
+
+#logging:
+#  level:
+#    root: debug

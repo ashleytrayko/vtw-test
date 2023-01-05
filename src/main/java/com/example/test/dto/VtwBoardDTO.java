@@ -19,4 +19,5 @@ public class VtwBoardDTO {
     private VtwUser vtwUser;
     private Timestamp creationDate;
     private Timestamp updateDate;
+
 }

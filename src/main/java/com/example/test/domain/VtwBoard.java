@@ -27,7 +27,7 @@ public class VtwBoard {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vtwuser_userid")
     private VtwUser vtwUser;
 
