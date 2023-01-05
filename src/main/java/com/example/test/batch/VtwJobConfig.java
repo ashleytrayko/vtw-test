@@ -35,6 +35,8 @@ import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -142,7 +144,7 @@ public class VtwJobConfig {
         DefaultLineMapper<VtwBatchDTO> defaultLineMapper = new DefaultLineMapper<>();
 
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
-        delimitedLineTokenizer.setNames(new String[]{"boardNo","subject", "contents", "vtwUser", "creationDate", "updateDate"});
+        delimitedLineTokenizer.setNames(new String[]{"contents", "vtwUser", "creationDate"});
         delimitedLineTokenizer.setDelimiter(";");
 
         BeanWrapperFieldSetMapper<VtwBatchDTO> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<>();
@@ -158,7 +160,7 @@ public class VtwJobConfig {
     @Bean
     public FlatFileItemWriter<VtwBoard> vtwJob_CsvWriter(Resource resource){
         BeanWrapperFieldExtractor<VtwBoard> vtwBoardBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-        vtwBoardBeanWrapperFieldExtractor.setNames(new String[]{"boardNo","subject", "contents", "vtwUser", "creationDate", "updateDate"});
+        vtwBoardBeanWrapperFieldExtractor.setNames(new String[]{"contents", "vtwUser", "creationDate"});
         vtwBoardBeanWrapperFieldExtractor.afterPropertiesSet();
 
         DelimitedLineAggregator<VtwBoard> delimitedLineAggregator = new DelimitedLineAggregator<>();
@@ -171,7 +173,7 @@ public class VtwJobConfig {
                 .headerCallback(new FlatFileHeaderCallback() {
                     @Override
                     public void writeHeader(Writer writer) throws IOException {
-                        writer.write("boardNo; subject; contents; vtwUser; creationDate; updateDate");
+                        writer.write("contents; vtwUser; creationDate");
                     }
                 })
                 .shouldDeleteIfEmpty(true)
@@ -182,9 +184,8 @@ public class VtwJobConfig {
     @Bean
     public ItemProcessor<VtwBatchDTO, VtwBatchBoard> csvToJpa_processor(){
         StringToTimestamp stringToTimestamp = new StringToTimestamp();
-        return VtwBatchDTO -> new VtwBatchBoard(Long.parseLong(VtwBatchDTO.getBoardNo()),VtwBatchDTO.getSubject(), VtwBatchDTO.getContents(),
-                new VtwUser(VtwBatchDTO.getVtwUser().getUserId(),VtwBatchDTO.getVtwUser().getUsername(),VtwBatchDTO.getVtwUser().getPassword(),VtwBatchDTO.getVtwUser().getRole(),VtwBatchDTO.getVtwUser().getCreationDate(),VtwBatchDTO.getVtwUser().getUpdateDate())
-                ,stringToTimestamp.convert(VtwBatchDTO.getCreationDate()), stringToTimestamp.convert(VtwBatchDTO.getUpdateDate()));
+        return VtwBatchDTO -> new VtwBatchBoard(VtwBatchDTO.getContents(), VtwBatchDTO.getVtwUser()
+                ,stringToTimestamp.convert(VtwBatchDTO.getCreationDate()));
     }
 
 }

@@ -13,11 +13,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VtwBatchDTO {
-    private String boardNo;
-    private String subject;
     private String contents;
-    private VtwUser vtwUser;
+    private String vtwUser;
     private String creationDate;
-    private String updateDate;
-
 }

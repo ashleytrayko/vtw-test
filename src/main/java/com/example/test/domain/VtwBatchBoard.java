@@ -16,24 +16,15 @@ import java.sql.Timestamp;
 @Data
 @Builder
 public class VtwBatchBoard {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long boardNo;
-
-    @Column(nullable = false, length = 100)
-    private String subject;
 
     @Lob
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vtwuser_userid")
-    private VtwUser vtwUser;
 
-    @CreationTimestamp
+    @Column(nullable = false)
+    private String username;
+
+    @Id
     private Timestamp creationDate;
-
-    @UpdateTimestamp
-    private Timestamp updateDate;
 }
