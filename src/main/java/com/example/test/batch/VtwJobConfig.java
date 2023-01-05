@@ -171,7 +171,7 @@ public class VtwJobConfig {
                 .headerCallback(new FlatFileHeaderCallback() {
                     @Override
                     public void writeHeader(Writer writer) throws IOException {
-                        writer.write("boardNo,subject, contents, vtwUser, creationDate, updateDate");
+                        writer.write("boardNo; subject; contents; vtwUser; creationDate; updateDate");
                     }
                 })
                 .shouldDeleteIfEmpty(true)
@@ -182,8 +182,9 @@ public class VtwJobConfig {
     @Bean
     public ItemProcessor<VtwBatchDTO, VtwBatchBoard> csvToJpa_processor(){
         StringToTimestamp stringToTimestamp = new StringToTimestamp();
-        return VtwBoardDTO -> new VtwBatchBoard(VtwBoardDTO.getBoardNo(),VtwBoardDTO.getSubject(), VtwBoardDTO.getContents(),
-                VtwBoardDTO.getVtwUser(),stringToTimestamp.convert(VtwBoardDTO.getCreationDate()), stringToTimestamp.convert(VtwBoardDTO.getUpdateDate()));
+        return VtwBatchDTO -> new VtwBatchBoard(Long.parseLong(VtwBatchDTO.getBoardNo()),VtwBatchDTO.getSubject(), VtwBatchDTO.getContents(),
+                new VtwUser(VtwBatchDTO.getVtwUser().getUserId(),VtwBatchDTO.getVtwUser().getUsername(),VtwBatchDTO.getVtwUser().getPassword(),VtwBatchDTO.getVtwUser().getRole(),VtwBatchDTO.getVtwUser().getCreationDate(),VtwBatchDTO.getVtwUser().getUpdateDate())
+                ,stringToTimestamp.convert(VtwBatchDTO.getCreationDate()), stringToTimestamp.convert(VtwBatchDTO.getUpdateDate()));
     }
 
 }
