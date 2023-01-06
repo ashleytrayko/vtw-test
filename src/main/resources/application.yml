@@ -18,12 +18,12 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
-#    url: jdbc:mysql://172.30.1.103:3306/analysis?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-    username: root
-    password: root
-#    username: analysis
-#    password: Analysis123#
+#    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://172.30.1.103:3306/analysis?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: root
+#    password: root
+    username: analysis
+    password: Analysis123#
 
   jpa:
     open-in-view: false

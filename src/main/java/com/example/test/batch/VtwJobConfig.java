@@ -69,7 +69,7 @@ public class VtwJobConfig {
         return stepBuilderFactory.get("vtwJob_step1()")
                 .<VtwBoard,VtwBoard>chunk(chunkSize)
                 .reader(vtwJob_ItemReader())
-                .writer(vtwJob_CsvWriter(new FileSystemResource("output/vtwBoardList.csv")))
+                .writer(vtwJob_CsvWriter(new PathResource("output/vtwBoardList.csv")))
                 .build();
     }
 
