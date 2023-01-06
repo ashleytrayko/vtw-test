@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogDTO {
-    private UUID logNumber;
+    private Long logNumber;
     private String contents;
     private String user;
     private String creationDate;

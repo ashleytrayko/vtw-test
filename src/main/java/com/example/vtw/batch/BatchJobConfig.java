@@ -6,6 +6,7 @@ import com.example.vtw.dto.LogDTO;
 import com.example.vtw.dto.BoardDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.id.IncrementGenerator;
 import org.hibernate.id.UUIDGenerator;
 import org.hibernate.id.factory.internal.DefaultIdentifierGeneratorFactory;
@@ -42,6 +43,7 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.UUID;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,7 +52,7 @@ public class BatchJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
-    private final KafkaTemplate<LogDTO, LogDTO> kafkaTemplate;
+    private final KafkaTemplate<Long, LogDTO> kafkaTemplate;
 
     // 5개 단위로 읽고 커밋
     private final int chunkSize = 5;
@@ -63,7 +65,7 @@ public class BatchJobConfig {
         return jobBuilderFactory.get("BatchJobConfig")
                 .start(boardTableToLogTable())
                 .next(createCsvFile())
-//                .next(csvToKafka())
+                .next(csvToKafka())
                 .build();
     }
 
@@ -89,15 +91,15 @@ public class BatchJobConfig {
     }
 
 //     Step 3 CSV FILE -> Kafka
-//    @Bean
-//    public Step csvToKafka(){
-//        return stepBuilderFactory.get("csvToKafka")
-//                .<LogDTO, LogDTO>chunk(chunkSize)
-//                .reader(logCsvFileReader())
-//                .processor(objectToString())
-//                .writer(kafkaItemWriter())
-//                .build();
-//    }
+    @Bean
+    public Step csvToKafka(){
+        return stepBuilderFactory.get("csvToKafka")
+                .<LogDTO, LogDTO>chunk(chunkSize)
+                .reader(logCsvFileReader())
+                .processor(objectToString())
+                .writer(kafkaItemWriter())
+                .build();
+    }
 
 
 
@@ -167,8 +169,7 @@ public class BatchJobConfig {
     // BoardDTO를 Log 로 변환
     @Bean
     public ItemProcessor<Board, Log> BoardToLogProcessor(){
-
-        return BoardDTO -> new Log(UUID.randomUUID(),BoardDTO.getContents(), BoardDTO.getUser()
+        return BoardDTO -> new Log(BoardDTO.getBoardNo(),BoardDTO.getContents(), BoardDTO.getUser()
                 ,BoardDTO.getCreationDate(), new Timestamp(System.currentTimeMillis()));
     }
 
@@ -197,13 +198,13 @@ public class BatchJobConfig {
     }
 
     @Bean
-    public KafkaItemWriter<LogDTO, LogDTO> kafkaItemWriter(){
-        return new KafkaItemWriterBuilder<LogDTO, LogDTO>().kafkaTemplate(kafkaTemplate).itemKeyMapper(LogDTO::getLogNumber).delete(false).build();
+    public KafkaItemWriter<Long, LogDTO> kafkaItemWriter(){
+        return new KafkaItemWriterBuilder<Long, LogDTO>().kafkaTemplate(kafkaTemplate).itemKeyMapper(LogDTO::getLogNumber).delete(false).build();
     }
 
     @Bean
     public ItemProcessor<LogDTO, LogDTO> objectToString(){
-        return LogDTO -> new LogDTO(LogDTO.getContents().toString(), LogDTO.getUser().toString(), LogDTO.getCreationDate().toString());
+        return LogDTO -> new LogDTO(LogDTO.getLogNumber(),LogDTO.getContents().toString(), LogDTO.getUser().toString(), LogDTO.getCreationDate().toString());
     }
 
 }

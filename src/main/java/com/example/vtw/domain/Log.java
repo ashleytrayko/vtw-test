@@ -18,8 +18,7 @@ import java.util.UUID;
 public class Log {
 
     @Id
-    @Column(length = 50)
-    private UUID logNumber;
+    private long logNumber;
 
     @Lob
     @Column(nullable = false)
