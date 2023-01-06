@@ -1,10 +1,10 @@
-package com.example.test.service;
+package com.example.vtw.service;
 
-import com.example.test.configuration.PrincipalDetail;
-import com.example.test.domain.RoleType;
-import com.example.test.domain.VtwUser;
-import com.example.test.dto.VtwUserDTO;
-import com.example.test.repository.VtwUserRepository;
+import com.example.vtw.configuration.PrincipalDetail;
+import com.example.vtw.domain.RoleType;
+import com.example.vtw.domain.User;
+import com.example.vtw.dto.UserDTO;
+import com.example.vtw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class VtwUserService {
+public class UserService {
 
-    private final VtwUserRepository vtwUserRepository;
+    private final UserRepository userRepository;
 
     @Bean
     public BCryptPasswordEncoder encoder(){
@@ -26,22 +26,22 @@ public class VtwUserService {
     // 읽기만 하는 데이터이므로 ReadOnly해줌
 
     @Transactional(readOnly = true)
-    public VtwUser findUser(String username){
-        VtwUser user = vtwUserRepository.findByUsername(username).orElseGet(()-> new VtwUser());
+    public User findUser(String username){
+        User user = userRepository.findByUsername(username).orElseGet(()-> new User());
         return user;
     }
 
     @Transactional
-    public String join(VtwUserDTO vtwUserDTO){
+    public String join(UserDTO userDTO){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = vtwUserDTO.getPassword();
+        String password = userDTO.getPassword();
         String encodedPassword = encoder.encode(password);
-        VtwUser vtwUser = VtwUser.builder()
-                                .username(vtwUserDTO.getUsername())
+        User user = User.builder()
+                                .username(userDTO.getUsername())
                                 .password(encodedPassword)
                                 .role(RoleType.USER)
                                 .build();
-        VtwUser returnValue = vtwUserRepository.saveAndFlush(vtwUser);
+        User returnValue = userRepository.saveAndFlush(user);
         if(returnValue != null){
             return "success";
         }else{
@@ -50,7 +50,7 @@ public class VtwUserService {
     }
     @Transactional
     public String resign(PrincipalDetail principal) {
-        int returnValue = vtwUserRepository.customDeleteById(principal.getUser().getUserId());
+        int returnValue = userRepository.customDeleteById(principal.getUser().getUserId());
         if(returnValue >= 1){
             return "success";
         } else {
@@ -59,15 +59,15 @@ public class VtwUserService {
     }
 
     @Transactional
-    public String updateUser(VtwUserDTO vtwUserDTO) {
-        VtwUser vtwUser = vtwUserRepository.findById(vtwUserDTO.getUserId())
+    public String updateUser(UserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getUserId())
                 .orElseThrow(()->{
                     return new IllegalArgumentException("불러올 유저가 없습니다.");
                 });
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String newPassword = encoder.encode(vtwUserDTO.getPassword());
-        vtwUser.setPassword(newPassword);
-        VtwUser returnValue = vtwUserRepository.saveAndFlush(vtwUser);
+        String newPassword = encoder.encode(userDTO.getPassword());
+        user.setPassword(newPassword);
+        User returnValue = userRepository.saveAndFlush(user);
         if(returnValue != null){
             return "success";
         } else {

@@ -1,40 +1,38 @@
-package com.example.test.controller;
+package com.example.vtw.controller;
 
-import com.example.test.configuration.PrincipalDetail;
-import com.example.test.service.VtwBoardService;
-import com.example.test.service.VtwUserService;
+import com.example.vtw.configuration.PrincipalDetail;
+import com.example.vtw.service.BoardService;
+import com.example.vtw.service.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 // 단순 View만 처리하는 Controller로 수정
-@Controller
-public class VtwController {
+@org.springframework.stereotype.Controller
+public class Controller {
     
 
 //    필드 의존성 주입으로 순환참조 문제 발생가능 -> 실제로 발생함. 생성자 의존성 주입으로 수정
 //    @Autowired
 //    private VtwService vtwService;
 
-    private final VtwUserService vtwUserService;
-    private final VtwBoardService vtwBoardService;
+    private final UserService userService;
+    private final BoardService boardService;
 
-    public VtwController(VtwUserService vtwUserService, VtwBoardService vtwBoardService){
-        this.vtwUserService = vtwUserService;
-        this.vtwBoardService = vtwBoardService;
+    public Controller(UserService userService, BoardService boardService){
+        this.userService = userService;
+        this.boardService = boardService;
     }
 
     @GetMapping("/")
     public String mainPage(
             Model model,
             @PageableDefault(size = 10, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable){
-        model.addAttribute("boards", vtwBoardService.boardList(pageable));
+        model.addAttribute("boards", boardService.boardList(pageable));
         return "mainPage";
     }
 
@@ -60,12 +58,12 @@ public class VtwController {
 
     @GetMapping("/board/updateForm")
     public String updateForm(@RequestParam long boardNo, Model model) {
-        model.addAttribute("board", vtwBoardService.selectOne(boardNo));
+        model.addAttribute("board", boardService.selectOne(boardNo));
         return "/board/updateForm";
     }
     @GetMapping("/detail/{boardNo}")
     public String boardDetail(@PathVariable long boardNo, Model model){
-        model.addAttribute("board",vtwBoardService.selectOne(boardNo));
+        model.addAttribute("board", boardService.selectOne(boardNo));
         return "board/boardDetail";
     }
 

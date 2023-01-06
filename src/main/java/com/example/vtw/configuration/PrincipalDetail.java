@@ -1,6 +1,6 @@
-package com.example.test.configuration;
+package com.example.vtw.configuration;
 
-import com.example.test.domain.VtwUser;
+import com.example.vtw.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,9 +9,9 @@ import java.util.Collection;
 
 public class PrincipalDetail implements UserDetails {
 
-    private VtwUser user;
+    private User user;
 
-    public PrincipalDetail(VtwUser user){
+    public PrincipalDetail(User user){
 
         // Composition
         this.user = user;
@@ -36,7 +36,7 @@ public class PrincipalDetail implements UserDetails {
         return user.getUsername();
     }
 
-    public VtwUser getUser() {return user;}
+    public User getUser() {return user;}
 
     @Override
     public boolean isAccountNonExpired() {

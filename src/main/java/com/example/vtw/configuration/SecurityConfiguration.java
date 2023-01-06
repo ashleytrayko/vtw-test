@@ -1,6 +1,6 @@
-package com.example.test.configuration;
+package com.example.vtw.configuration;
 
-import com.example.test.service.VtwUserService;
+import com.example.vtw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final VtwUserService vtwUserService;
+    private final UserService userService;
     private final PrincipalDetailService principalDetailService;
 
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider(){
-        return new CustomAuthenticationProvider(principalDetailService, vtwUserService.encoder());
+        return new CustomAuthenticationProvider(principalDetailService, userService.encoder());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.test.domain;
+package com.example.vtw.domain;
 
 
 public enum RoleType {

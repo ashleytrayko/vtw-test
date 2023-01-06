@@ -1,6 +1,6 @@
-package com.example.test.dto;
+package com.example.vtw.dto;
 
-import com.example.test.domain.VtwUser;
+import com.example.vtw.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,11 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VtwBoardDTO {
+public class BoardDTO {
     private long boardNo;
     private String subject;
     private String contents;
-    private VtwUser vtwUser;
+    private User user;
     private Timestamp creationDate;
     private Timestamp updateDate;
 

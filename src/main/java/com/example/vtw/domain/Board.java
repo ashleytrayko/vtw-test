@@ -1,4 +1,4 @@
-package com.example.test.domain;
+package com.example.vtw.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Data
 @Builder
-public class VtwBoard {
+public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardNo;
@@ -27,9 +27,9 @@ public class VtwBoard {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vtwuser_userid")
-    private VtwUser vtwUser;
+    private User user;
 
     @CreationTimestamp
     private Timestamp creationDate;

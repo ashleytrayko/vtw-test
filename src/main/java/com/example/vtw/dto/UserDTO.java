@@ -1,6 +1,6 @@
-package com.example.test.dto;
+package com.example.vtw.dto;
 
-import com.example.test.domain.RoleType;
+import com.example.vtw.domain.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VtwUserDTO {
+public class UserDTO {
     private long userId;
     private String username;
     private String password;

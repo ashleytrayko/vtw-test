@@ -1,10 +1,11 @@
-package com.example.test.batch;
+package com.example.vtw.batch;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StringToTimestamp {
+    // CSV에서 읽어온 데이터는 String이기 때문에 Timestamp로 변환해줌
     public Timestamp convert(String input){
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");

@@ -1,4 +1,4 @@
-package com.example.test.configuration;
+package com.example.vtw.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
