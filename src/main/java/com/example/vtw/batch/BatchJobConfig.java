@@ -27,12 +27,15 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.kafka.KafkaItemReader;
 import org.springframework.batch.item.kafka.KafkaItemWriter;
+import org.springframework.batch.item.kafka.builder.KafkaItemReaderBuilder;
 import org.springframework.batch.item.kafka.builder.KafkaItemWriterBuilder;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -41,6 +44,8 @@ import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -52,7 +57,7 @@ public class BatchJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
-    private final KafkaTemplate<Long, LogDTO> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     // 5개 단위로 읽고 커밋
     private final int chunkSize = 5;
@@ -66,6 +71,7 @@ public class BatchJobConfig {
                 .start(boardTableToLogTable())
                 .next(createCsvFile())
                 .next(csvToKafka())
+                .next(kafkaToCsv())
                 .build();
     }
 
@@ -94,29 +100,61 @@ public class BatchJobConfig {
     @Bean
     public Step csvToKafka(){
         return stepBuilderFactory.get("csvToKafka")
-                .<LogDTO, LogDTO>chunk(chunkSize)
+                .<LogDTO, String>chunk(chunkSize)
                 .reader(logCsvFileReader())
                 .processor(objectToString())
                 .writer(kafkaItemWriter())
                 .build();
     }
 
+    @Bean
+    public Step kafkaToCsv(){
+        return stepBuilderFactory.get("kafkaToCsv")
+                .<String, Log>chunk(chunkSize)
+                .reader(KafkaItemReader())
+                .writer(kafka_CsvFileWriter(new PathResource("output/kafkaOutput.csv")))
+                .build();
+    }
 
+// Step 4 Kafka Reader -> CSV File
 
-//    @Bean
-//    public KafkaItemReader<byte[], byte[]> kafkaItemReader(){
-//        Properties consumerProperties = new Properties();
-//        consumerProperties.putAll(kafkaProperties.buildConsumerProperties());
-//
-//        return new KafkaItemReaderBuilder<byte[], byte[]>()
-//                .name("kafkaItemReader")
-//                .topic("stream-test")
-//                .partitions(1)
-//                .partitionOffsets(new HashMap<>())
-//                .consumerProperties(consumerProperties)
-//                .build();
-//    }
-//
+    @Bean
+    public KafkaItemReader<String, String> kafkaItemReader(){
+        Properties consumerProperties = new Properties();
+        consumerProperties.putAll(kafkaProperties.buildConsumerProperties());
+
+        return new KafkaItemReaderBuilder<String, String>()
+                .name("kafkaItemReader")
+                .topic("stream-test")
+                .partitions(1)
+                .partitionOffsets(new HashMap<>())
+                .consumerProperties(consumerProperties)
+                .build();
+    }
+
+    @Bean
+    public FlatFileItemWriter<Log> kafka_CsvFileWriter(Resource resource){
+        BeanWrapperFieldExtractor<Log> vtwBoardBeanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+        vtwBoardBeanWrapperFieldExtractor.setNames(new String[]{"contents", "user", "creationDate"});
+        vtwBoardBeanWrapperFieldExtractor.afterPropertiesSet();
+
+        DelimitedLineAggregator<Log> delimitedLineAggregator = new DelimitedLineAggregator<>();
+        delimitedLineAggregator.setDelimiter(";");
+        delimitedLineAggregator.setFieldExtractor(vtwBoardBeanWrapperFieldExtractor);
+
+        return new FlatFileItemWriterBuilder<Log>().name("board_CsvFileWriter")
+                .resource(resource)
+                .lineAggregator(delimitedLineAggregator)
+                .headerCallback(new FlatFileHeaderCallback() {
+                    @Override
+                    public void writeHeader(Writer writer) throws IOException {
+                        writer.write("contents; user; creationDate");
+                    }
+                })
+                .shouldDeleteIfEmpty(true)
+                .shouldDeleteIfExists(true)
+                .build();
+    }
 
     
     
@@ -198,13 +236,16 @@ public class BatchJobConfig {
     }
 
     @Bean
-    public KafkaItemWriter<Long, LogDTO> kafkaItemWriter(){
-        return new KafkaItemWriterBuilder<Long, LogDTO>().kafkaTemplate(kafkaTemplate).itemKeyMapper(LogDTO::getLogNumber).delete(false).build();
+    public KafkaItemWriter<String, String> kafkaItemWriter(){
+        return new KafkaItemWriterBuilder<String, String>()
+                .kafkaTemplate(kafkaTemplate)
+                .itemKeyMapper(Object::toString)
+                .build();
     }
 
     @Bean
-    public ItemProcessor<LogDTO, LogDTO> objectToString(){
-        return LogDTO -> new LogDTO(LogDTO.getLogNumber(),LogDTO.getContents().toString(), LogDTO.getUser().toString(), LogDTO.getCreationDate().toString());
+    public ItemProcessor<LogDTO, String> objectToString(){
+        return String::valueOf;
     }
 
 }
