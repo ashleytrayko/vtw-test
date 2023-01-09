@@ -59,6 +59,8 @@ spring:
     template:
       default-topic: stream-test
 
+
+
 #logging:
 #  level:
 #    root: debug
