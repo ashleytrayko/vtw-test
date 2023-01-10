@@ -59,6 +59,9 @@ spring:
     template:
       default-topic: stream-test
 
+  batch:
+    job:
+      enabled: false
 
 
 #logging:

@@ -67,7 +67,6 @@ public class BatchJobConfig {
     
     // 배치 잡 생성
     // DB SELECT -> DB(이력) INSERT -> CSV 파일 생성 -> 카프카 전송
-    @Scheduled(cron = "5 * * * * *")
     @Bean
     public Job batchJob_builder(){
         return jobBuilderFactory.get("BatchJobConfig")
