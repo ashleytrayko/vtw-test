@@ -24,7 +24,7 @@ public class BatchScheduler {
     private final BatchJobConfig batchJobConfig;
     
     
-    @Scheduled(cron = "0 0/5 * * * *") // 5분마다 실행
+    @Scheduled(cron = "0 0 0 1 1 0") // 5분마다 실행
     public void runJob(){
 
         Map<String, JobParameter> confMap = new HashMap<>();

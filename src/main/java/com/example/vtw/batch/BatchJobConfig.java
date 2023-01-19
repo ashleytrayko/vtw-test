@@ -7,8 +7,6 @@ import com.opencsv.CSVParser;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -39,7 +37,6 @@ import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.*;
@@ -214,7 +211,6 @@ public class BatchJobConfig {
             String logData = LogDTO.getContents().toString() +";"+ LogDTO.getUser().toString()+";" + LogDTO.getCreationDate().toString();
             return logData;
         };
-//        return String::valueOf;
     }
 
     // Kafka Consumer로 Topic에 있는 데이터를 읽어들임

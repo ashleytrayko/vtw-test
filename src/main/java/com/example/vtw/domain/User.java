@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
-@Entity
+@Entity (name = "User")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
