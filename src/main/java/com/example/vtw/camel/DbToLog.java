@@ -27,7 +27,6 @@ public class DbToLog extends EndpointRouteBuilder {
                 .log("${body.userId}, ${body.username}, ${body.password}, ${body.role}, ${body.creationDate}, ${body.updateDate}")
                 .transform()
                 .simple("${body.userId}, ${body.username}, ${body.password}, ${body.role}, ${body.creationDate}, ${body.updateDate}")
-                .to(file("output?fileName=camelResult.txt&fileExist=Append&appendChars=\\n"))
-                .stop();
+                .to(file("output?fileName=camelResult.txt&fileExist=Append&appendChars=\\n"));
     }
 }
